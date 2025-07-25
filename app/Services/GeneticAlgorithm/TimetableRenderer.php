@@ -2,7 +2,8 @@
 
 namespace App\Services\GeneticAlgorithm;
 
-use Storage;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 use App\Models\Day as DayModel;
 use App\Models\Room as RoomModel;
@@ -13,10 +14,10 @@ use App\Models\Professor as ProfessorModel;
 
 class TimetableRenderer
 {
+    protected $timetable;
+
     /**
      * Create a new instance of this class
-     *
-     * @param App\Models\Timetable Timetable whose data we are rendering
      */
     public function __construct($timetable)
     {
@@ -25,10 +26,6 @@ class TimetableRenderer
 
     /**
      * Generate HTML layout files out of the timetable data
-     *
-     * Chromosome interpretation is as follows
-     * Timeslot, Room, Professor
-     *
      */
     public function render()
     {
@@ -55,32 +52,24 @@ class TimetableRenderer
         $content = "";
 
         foreach ($classes as $class) {
-            $header = "<tr class='table-head'>";
-            $header .= "<td>Days</td>";
+            $header = "<tr class='table-head'><td>Days</td>";
 
             foreach ($timeslots as $timeslot) {
-                $header .= "\t<td>" . $timeslot->time . "</td>";
+                $header .= "<td>" . $timeslot->time . "</td>";
             }
 
             $header .= "</tr>";
-
             $body = "";
 
             foreach ($days as $day) {
                 $body .= "<tr><td>" . strtoupper($day->short_name) . "</td>";
                 foreach ($timeslots as $timeslot) {
-                    if (isset($data[$class->id][$day->name][$timeslot->time])) {
+                    $cellData = $data[$class->id][$day->name][$timeslot->time] ?? null;
+                    if ($cellData) {
                         $body .= "<td class='text-center'>";
-                        $slotData = $data[$class->id][$day->name][$timeslot->time];
-                        $courseCode = $slotData['course_code'];
-                        $courseName = $slotData['course_name'];
-                        $professor = $slotData['professor'];
-                        $room = $slotData['room'];
-
-                        $body .= "<span class='course_code'>{$courseCode}</span><br />";
-                        $body .= "<span class='room pull-left'>{$room}</span>";
-                        $body .= "<span class='professor pull-right'>{$professor}</span>";
-
+                        $body .= "<span class='course_code'>{$cellData['course_code']}</span><br />";
+                        $body .= "<span class='room pull-left'>{$cellData['room']}</span>";
+                        $body .= "<span class='professor pull-right'>{$cellData['professor']}</span>";
                         $body .= "</td>";
                     } else {
                         $body .= "<td></td>";
@@ -102,11 +91,7 @@ class TimetableRenderer
     }
 
     /**
-     * Get an associative array with data for constructing timetable
-     *
-     * @param array $chromosome Timetable chromosome
-     * @param array $scheme Mapping for reading chromosome
-     * @return array Timetable data
+     * Generate data structure from chromosome and scheme
      */
     public function generateData($chromosome, $scheme)
     {
@@ -115,23 +100,40 @@ class TimetableRenderer
         $chromosomeIndex = 0;
         $groupId = null;
 
-        while ($chromosomeIndex < count($chromosome)) {
-            while ($scheme[$schemeIndex][0] == 'G') {
+        while ($chromosomeIndex < count($chromosome) && $schemeIndex < count($scheme)) {
+            // Find next groupId
+            while (isset($scheme[$schemeIndex]) && str_starts_with($scheme[$schemeIndex], 'G')) {
                 $groupId = substr($scheme[$schemeIndex], 1);
-                $schemeIndex += 1;
+                $schemeIndex++;
             }
 
-            $courseId = $scheme[$schemeIndex];
+            $courseId = $scheme[$schemeIndex] ?? null;
+            $schemeIndex++;
+
+            if (!$groupId || !$courseId) {
+                Log::warning("Missing groupId or courseId in scheme. Skipping...");
+                $chromosomeIndex += 3;
+                continue;
+            }
 
             $class = CollegeClassModel::find($groupId);
             $course = CourseModel::find($courseId);
 
-            $timeslotGene = $chromosome[$chromosomeIndex];
-            $roomGene = $chromosome[$chromosomeIndex + 1];
-            $professorGene = $chromosome[$chromosomeIndex + 2];
+            $timeslotGene = $chromosome[$chromosomeIndex] ?? null;
+            $roomGene = $chromosome[$chromosomeIndex + 1] ?? null;
+            $professorGene = $chromosome[$chromosomeIndex + 2] ?? null;
+            $chromosomeIndex += 3;
 
-            $matches = [];
-            preg_match('/D(\d*)T(\d*)/', $timeslotGene, $matches);
+            if (!$timeslotGene || !$roomGene || !$professorGene) {
+                Log::warning("Incomplete gene triplet for group $groupId, course $courseId. Skipping...");
+                continue;
+            }
+
+            preg_match('/D(\d+)T(\d+)/', $timeslotGene, $matches);
+            if (count($matches) < 3) {
+                Log::warning("Invalid timeslot gene format: $timeslotGene");
+                continue;
+            }
 
             $dayId = $matches[1];
             $timeslotId = $matches[2];
@@ -141,25 +143,28 @@ class TimetableRenderer
             $professor = ProfessorModel::find($professorGene);
             $room = RoomModel::find($roomGene);
 
-            if (!isset($data[$groupId])) {
-                $data[$groupId] = [];
+            if (!$day || !$timeslot || !$professor || !$room || !$class || !$course) {
+                Log::warning("One or more related models not found", [
+                    'dayId' => $dayId,
+                    'timeslotId' => $timeslotId,
+                    'professorId' => $professorGene,
+                    'roomId' => $roomGene,
+                    'groupId' => $groupId,
+                    'courseId' => $courseId
+                ]);
+                continue;
             }
 
-            if (!isset($data[$groupId][$day->name])) {
-                $data[$groupId][$day->name] = [];
-            }
+            if (!isset($data[$groupId])) $data[$groupId] = [];
+            if (!isset($data[$groupId][$day->name])) $data[$groupId][$day->name] = [];
+            if (!isset($data[$groupId][$day->name][$timeslot->time])) $data[$groupId][$day->name][$timeslot->time] = [];
 
-            if (!isset($data[$groupId][$day->name][$timeslot->time])) {
-                $data[$groupId][$day->name][$timeslot->time] = [];
-            }
-
-            $data[$groupId][$day->name][$timeslot->time]['course_code'] = $course->course_code;
-            $data[$groupId][$day->name][$timeslot->time]['course_name'] = $course->name;
-            $data[$groupId][$day->name][$timeslot->time]['room'] = $room->name;
-            $data[$groupId][$day->name][$timeslot->time]['professor'] = $professor->name;
-
-            $schemeIndex++;
-            $chromosomeIndex += 3;
+            $data[$groupId][$day->name][$timeslot->time] = [
+                'course_code' => $course->course_code,
+                'course_name' => $course->name,
+                'room' => $room->name,
+                'professor' => $professor->name
+            ];
         }
 
         return $data;

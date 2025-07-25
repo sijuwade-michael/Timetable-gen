@@ -19,9 +19,9 @@
 }
 
 .login-form-header {
-    background: #B0262E;
-    border: 1px solid #B0262E;
-    color: #FFFFFF;
+    background: #1f2937; /* dark slate */
+    border: 1px solid #1f2937;
+    color: #f9fafb; /* near-white text */
     height: 60px;
 }
 
@@ -31,62 +31,60 @@
 }
 
 .login-form-body {
-    border: 1px solid #B0262E;
-    background: #FFFFFF;
+    border: 1px solid #374151; /* darker border */
+    background: #111827; /* deep charcoal */
+    color: #f9fafb;
     padding: 10px;
 }
 
 /** Style for buttons */
 .btn-custom {
-    background: #B0262E;
-    color: #FFFFFF;
+    background: #0d9488; /* teal */
+    color: #ffffff;
 }
 
 .btn-custom:hover {
-    background: #9B2A34;
-    color: #FFFFFF;
+    background: #0f766e;
+    color: #ffffff;
 }
 
 .btn, input[type=text], input[type=password] {
-    border-radius: 0px !important;
+    border-radius: 4px !important;
     height: 40px;
     font-size: 1.2em;
 }
 
 .site-logo {
-    color: #FFFFFF !important;
+    color: #f9fafb !important;
     font-size: 1.7em;
     font-weight: bold;
 }
 
 .sidebar {
-   background: #FF6347;
+   background: #111827; /* deep charcoal */
    height: 180vh;
 }
 
 /** Menu **/
 .site-logo-container {
-    background-color: #B22222;
+    background-color: #1f2937; /* dark slate */
     height: 70px;
 }
 
 .menu {
     margin-top: 50px;
-}
-
-.menu {
     font-size: 1.2em;
     list-style-type: none;
     margin-bottom: 20px;
     padding: 0px;
-    list-style-type: none;
 }
 
 .menu li {
-    color: #FFFAF0;
+    color: #d1d5db; /* light gray text */
     margin-bottom: 10px;
     cursor: pointer;
     padding: 18px;
+    transition: background 0.3s;
 }
 
 .menu li .fa {
@@ -96,23 +94,23 @@
 }
 
 .menu li:hover, .menu li.active {
-    color: #FFFFFF;
-    background-color: #DC143C;
+    color: #f9fafb;
+    background-color: #374151; /* slate hover */
     font-weight: bold;
 }
 
-.menu li.active{
-    border-left: 2px solid #FFFFFF;
+.menu li.active {
+    border-left: 2px solid #0d9488; /* teal accent */
 }
 
-.menu li a{
+.menu li a {
     text-decoration: none;
-    color: #FFFAF0;
+    color: inherit;
 }
 
 .page-title {
-    background-color: #FF6347;
-    color: #FFFFFF;
+    background-color: #1f2937;
+    color: #f9fafb;
     height: 70px;
 }
 
@@ -121,51 +119,53 @@
     margin-bottom: 20px;
 }
 
-/** Pages */
+/** Pages **/
 .no-data {
-    color: rgb(192, 192, 192);
+    color: rgb(107, 114, 128); /* muted gray */
     font-weight: bold;
     font-size: 3em;
     margin-top: 100px;
 }
 
 .modal.custom-modal .modal-content {
-    border-radius: 0px;
+    border-radius: 4px;
+    background: #1f2937;
+    color: #f9fafb;
 }
 
-/** Table */
+/** Table **/
 .table-head {
-    text-transform:uppercase;
+    text-transform: uppercase;
     text-align: left;
     padding-top: 5px;
     padding-bottom: 4px;
-    background: linear-gradient(rgb(229, 76, 16), rgb(172, 78, 41));
-    color: #FFFFFF;
+    background: linear-gradient(#374151, #1f2937); /* dark gradient */
+    color: #f9fafb;
 }
 
 tbody tr:nth-of-type(even) {
-    background-color: rgba(255, 255, 255, .1);
+    background-color: rgba(255, 255, 255, .02);
 }
 
 tbody tr:nth-of-type(odd) {
-    background-color: rgba(229, 76, 16, .1);
+    background-color: rgba(255, 255, 255, .04);
 }
 
-/** Redefinition for buttons */
-.btn-primary{
-    background: #5F9EA0;
+/** Redefinition for buttons **/
+.btn-primary {
+    background: #6366f1; /* indigo */
 }
 
 .btn-primary:hover, .btn-primary:focus {
-    background: #008B8B;
+    background: #4f46e5;
 }
 
 .btn-danger {
-    background: #FF6347;
+    background: #f97316; /* soft orange */
 }
 
 .btn-danger:hover {
-    background: #DC143C;
+    background: #ea580c;
 }
 
 /** Pagination buttons **/
@@ -175,14 +175,14 @@ tbody tr:nth-of-type(odd) {
 .pagination>.active>span,
 .pagination>.active>span:focus,
 .pagination>.active>span:hover {
-    background: #DC143C;
-    border: 1px solid #DC143C;
+    background: #0d9488; /* teal */
+    border: 1px solid #0d9488;
 }
 
 .pagination>li>a,
 .pagination>li>span {
-    background: rgba(229, 76, 16, .1);
-    color: #008B8B;
+    background: rgba(255, 255, 255, .05);
+    color: #0d9488;
 }
 
 .pagination>.disabled>a,
@@ -191,11 +191,7 @@ tbody tr:nth-of-type(odd) {
 .pagination>.disabled>span,
 .pagination>.disabled>span:focus,
 .pagination>.disabled>span:hover {
-    background: rgba(229, 76, 16, .1);
-}
-
-.paginationn>li>a:hover,
-.pagination>li>span:hover {
+    background: rgba(255, 255, 255, .02);
 }
 
 .select2-wrapper .select2-container {
@@ -204,14 +200,16 @@ tbody tr:nth-of-type(odd) {
 
 .select2-container--default .select2-selection--single,
 .select2-container--default .select2-selection--multiple {
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 0;
+    background-color: #1f2937;
+    border: 1px solid #374151;
+    border-radius: 4px;
     min-height: 38px;
+    color: #f9fafb;
 }
 
 .select2-container--default .select2-selection--single .select2-selection__rendered {
     padding-top: 5px;
+    color: #f9fafb;
 }
 
 .select2-container--default .select2-selection--single .select2-selection__arrow {
@@ -223,26 +221,26 @@ tbody tr:nth-of-type(odd) {
     cursor: pointer;
 }
 
-/** Dashboard */
+/** Dashboard **/
 .card-1 {
-    background: #FF6347;
+    background: #1e293b; /* slate */
 }
 
 .card-2 {
-    background: #FFA500;
+    background: #0d9488; /* teal */
 }
 
 .card-3 {
-    background: #3CB371;
+    background: #6366f1; /* indigo */
 }
 
 .card-4 {
-    background: #4682B4;
+    background: #f97316; /* soft orange */
 }
 
 .card-title {
     font-size: 1.2em;
-    color: #FFFFFF;
+    color: #f9fafb;
 }
 
 .card {
@@ -252,12 +250,12 @@ tbody tr:nth-of-type(odd) {
 
 .icon {
     font-size: 2.5em;
-    color: azure;
+    color: #f9fafb;
 }
 
 .card-body {
     font-size: 3.5em;
-    color: #fff;
+    color: #ffffff;
 }
 
 .timetable-btn {
@@ -269,4 +267,26 @@ tbody tr:nth-of-type(odd) {
 .input-group-btn .btn {
     font-size: 16px;
 }
+
+/* Logo slightly bigger but still balanced */
+.logo-img {
+    height: 36px;              /* slightly bigger than before (e.g., 24px) */
+    margin-right: 5px;
+    vertical-align: middle;
+    border-radius: 3px;
+}
+
+/* Make the text small and align with the logo neatly */
+.site-logo {
+    display: flex;
+    align-items: center;        /* vertically center text & image */
+    justify-content: center;    /* center horizontally inside sidebar */
+    font-size: 1.3em;          /* slightly small text */
+    font-weight: bold;
+    color: #fff;
+    margin: 20 0 0;
+    padding: 8px 0;            /* small vertical padding so header isn’t tall */
+}
+
+
 

@@ -1,56 +1,179 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In | Smart Timetable Generator</title>
+    @include('partials.styles')
+    <style>
+        body, html {
+            margin: 0; padding: 0; height: 100%;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #1b2a41; /* navy background */
+        }
+        .login-wrapper {
+            display: flex;
+            height: 100vh;
+        }
+        .login-left {
+            flex: 1;
+            position: relative; /* for positioning brand name */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #1b2a41;
+        }
+        .brand-name {
+    position: absolute;
+    top: 20px;                /* higher up */
+    left: 40px;
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: rgba(255, 255, 255, 0.15); /* very light so it's like behind */
+    text-transform: uppercase;
+    user-select: none;
+    opacity: 0;
+    animation: fadeSlideIn 1.2s forwards;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
+}
 
-		<!-- Styles -->
-		@include('partials.styles')
-		@yield('styles')
+.brand-name {
+    position: absolute;
+    top: 20px;
+    left: 40px;
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: rgba(255, 255, 255, 0.4); /* increase opacity from 0.15 → 0.4 */
+    text-transform: uppercase;
+    user-select: none;
+    opacity: 0;
+    animation: fadeSlideIn 1.2s forwards;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
 
-		<title>Sign In | Timetable</title>
-    </head>
+.brand-name::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background-color: rgba(255,255,255,0.4); /* also more visible underline */
+    margin-top: 5px;
+    border-radius: 2px;
+}
 
-    <body class="login-page">
-        <div class="container">
-            <div class="row">
-                <div class="col-xs-12 col-md-4 col-sm-8 col-lg-4 col-md-offset-4 col-sm-offset-2 col-lg-offset-4">
-                    <div id="login-form-container">
-                        <div class="login-form-header">
-                            <h3 class="text-center">timetable</h3>
-                        </div>
+@keyframes fadeSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 
-                        <div class="login-form-body">
-                            <div class="row">
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                     <form method="POST" action="{{ URL::to('/login') }}">
-                                        {!! csrf_field() !!}
-                                        @include('errors.form_errors')
 
-                                        <div class="form-group">
-                                            <label>Password</label>
-                                            <input type="password" class="form-control" placeholder="Password" name="password">
-                                        </div>
-
-                                        <div class="form-group">
-                                            <input type="submit" name="submit" value="SIGN IN" class="btn btn-lg btn-block btn-custom">
-                                        </div>
-
-                                        <div class="form-group">
-                                            <a href="/request_reset" class="btn btn-lg btn-block btn-primary">Forgot Password?</a>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+        .login-card {
+            width: 100%;
+            max-width: 350px;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            color: #000;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            transform: translateY(0);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .login-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+        }
+        .login-card .logo {
+            width: 50px;
+            margin-bottom: 10px;
+        }
+        .login-card h2, .login-card p, .login-card label, .login-card a {
+            color: #000;
+        }
+        .login-card h2 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        .login-card p {
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+        .login-card .form-group {
+            margin-bottom: 15px;
+        }
+        .login-card input[type="email"],
+        .login-card input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            background-color: #fff;
+            color: #000;
+        }
+        .login-card input::placeholder {
+            color: rgba(0,0,0,0.6);
+        }
+        .login-card .options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .login-card button {
+            width: 100%;
+            padding: 10px;
+            background-color: #1b2a41;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .login-card button:hover {
+            background-color: #243a5a;
+        }
+        .login-right {
+            flex: 1;
+            background: url('{{ asset('images/Time.jpg') }}') no-repeat center center;
+            background-size: cover;
+        }
+    </style>
+</head>
+<body>
+<div class="login-wrapper">
+    <div class="login-left">
+        <div class="brand-name">Smart Timetable Generator</div>
+        <div class="login-card">
+            <img src="{{ asset('images/Tau.logo.jpeg') }}" alt="Logo" class="logo">
+            <h2>Admin Login</h2>
+            <p>Sign in to manage the timetable</p>
+            <form method="POST" action="{{ URL::to('/login') }}">
+                {!! csrf_field() !!}
+                @include('errors.form_errors')
+                <div class="form-group">
+                    <input type="email" name="email" placeholder="Enter your email" required>
                 </div>
-            </div>
+                <div class="form-group">
+                    <input type="password" name="password" placeholder="Enter your password" required>
+                </div>
+                <div class="options">
+                    <label><input type="checkbox" name="remember"> Remember me</label>
+                    <a href="/request_reset">Forgot password?</a>
+                </div>
+                <button type="submit">Log In</button>
+            </form>
         </div>
-        <!-- Scripts -->
-        @include('partials.scripts')
-        @yield('scripts')
-    </body>
+    </div>
+    <div class="login-right"></div>
+</div>
+@include('partials.scripts')
+</body>
 </html>

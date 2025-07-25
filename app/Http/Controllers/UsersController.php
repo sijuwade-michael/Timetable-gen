@@ -36,12 +36,14 @@ class UsersController extends Controller
     public function loginUser(Request $request)
     {
         $rules = [
+            'email' => 'required',
             'password' => 'required'
         ];
 
         $this->validate($request, $rules);
 
-        $user = User::first();
+        $user = User::where('email', $request->email)->first();
+        
 
         if (!$user) {
             return redirect()->back()->withErrors(['No user account has been set up yet']);

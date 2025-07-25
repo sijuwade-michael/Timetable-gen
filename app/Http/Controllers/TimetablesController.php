@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Services\TimetableService;
 use App\Events\TimetablesRequested;
+use App\Exports\TimetableExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 use App\Models\Day;
 use App\Models\Timetable;
@@ -118,4 +120,6 @@ class TimetablesController extends Controller
             return view('timetables.view', compact('timetableData', 'timetableName'));
         }
     }
+
+
 }

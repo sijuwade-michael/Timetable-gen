@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services\GeneticAlgorithm;
 
 use App\Models\Room as RoomModel;
@@ -13,9 +14,9 @@ class Room
     private $roomId;
 
     /**
-     * Model of room from database
+     * Room model from the database
      *
-     * @var string
+     * @var RoomModel
      */
     private $model;
 
@@ -31,9 +32,9 @@ class Room
     }
 
     /**
-     * Get the Id of the room
+     * Get the ID of the room
      *
-     * @return int ID of room
+     * @return int
      */
     public function getId()
     {
@@ -41,9 +42,9 @@ class Room
     }
 
     /**
-     * Get the room's number
+     * Get the room's number (name)
      *
-     * @return string Room number
+     * @return string
      */
     public function getRoomNumber()
     {
@@ -53,7 +54,7 @@ class Room
     /**
      * Get the capacity of the room
      *
-     * @return int The capacity of the room
+     * @return int
      */
     public function getCapacity()
     {

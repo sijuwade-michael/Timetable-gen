@@ -11,7 +11,8 @@
 		@include('partials.styles')
 		@yield('styles')
 
-		<title>@yield('title') | Timetable</title>
+		<title>@yield('title') | Smart Timetable Generator </title>
+        
     </head>
 
     <body>

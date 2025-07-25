@@ -16,34 +16,37 @@ class GenerateTimetables implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $timetable;
+    protected Timetable $timetable;
 
-    public $timeout = 0;
+    public $timeout = 0; // No timeout — runs until finished
 
     /**
      * Create a new job instance.
-     *
-     * @return void
      */
-    public function __construct($timetable)
+    public function __construct(Timetable $timetable)
     {
         $this->timetable = $timetable;
     }
 
     /**
      * Execute the job.
-     *
-     * @return void
      */
     public function handle()
     {
+        $id = $this->timetable->id;
+
         try {
-            Log::info('Generating timetable');
+            Log::info("[GenerateTimetables Job] Starting generation for timetable ID: $id");
+
             $timetableGA = new TimetableGA($this->timetable);
             $timetableGA->run();
-            Log::info('Timetable Generated');
+
+            Log::info("[GenerateTimetables Job] Completed generation for timetable ID: $id");
         } catch (\Throwable $th) {
-            Log::error("Error while generating timetable " . $th->getMessage(), ['trace' => $th->getTrace()]);
+            Log::error("[GenerateTimetables Job] Error generating timetable ID $id: " . $th->getMessage(), [
+                'timetable_id' => $id,
+                'trace' => $th->getTraceAsString(),
+            ]);
         }
     }
 }

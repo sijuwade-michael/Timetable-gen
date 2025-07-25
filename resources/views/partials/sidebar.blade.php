@@ -1,7 +1,12 @@
 <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2 sidebar">
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 site-logo-container">
-            <h3 class="text-center site-logo">timetable</h3>
+            {{-- <h3 class="text-center site-logo">Smart Timetable </h3> --}}
+            <h3 class="text-center site-logo">
+    <img src="{{ asset('images/Tau.logo.jpeg') }}" alt="Logo" class="logo-img">
+    Smart Timetable Generator       
+</h3>
+
         </div>
     </div>
 
@@ -19,7 +24,7 @@
                     <a href="/courses"><span class="fa fa-book"></span><span class="text">Courses</span></a>
                 </li>
                 <li class="menu-link {{ ($page == 'professors') ? 'active' : '' }}">
-                    <a href="/professors"><span class="fa fa-graduation-cap"></span><span class="text">Professors</span></a>
+                    <a href="/professors"><span class="fa fa-graduation-cap"></span><span class="text">Lecturers</span></a>
                 </li>
                 <li class="menu-link {{ ($page == 'classes') ? 'active' : '' }}">
                     <a href="/classes"><span class="fa fa-users"></span><span class="text">Classes</span></a>

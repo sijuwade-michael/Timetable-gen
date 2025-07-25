@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services\GeneticAlgorithm;
 
 use App\Models\Professor as ProfessorModel;
@@ -15,15 +16,22 @@ class Professor
     /**
      * Professor model from db
      *
-     * @var App\Models\Professor
+     * @var ProfessorModel
      */
     private $professorModel;
 
     /**
+     * Timeslots that the professor is unavailable
+     *
+     * @var array
+     */
+    private $occupiedSlots;
+
+    /**
      * Create a new professor
      *
-     * @param int $id ID of professor
-     * @param array $occupiedSlots Timeslots that the professor is not available
+     * @param int   $id             ID of professor
+     * @param array $occupiedSlots  Timeslots that the professor is not available
      */
     public function __construct($id, $occupiedSlots)
     {
@@ -33,9 +41,9 @@ class Professor
     }
 
     /**
-     * Get ID Of professor
+     * Get ID of professor
      *
-     * @return int ID Of professor
+     * @return int
      */
     public function getId()
     {
@@ -45,13 +53,18 @@ class Professor
     /**
      * Get name of professor
      *
-     * @return string Name of professor
+     * @return string
      */
     public function getName()
     {
         return $this->professorModel->name;
     }
 
+    /**
+     * Get unavailable time slots
+     *
+     * @return array
+     */
     public function getOccupiedSlots()
     {
         return $this->occupiedSlots;

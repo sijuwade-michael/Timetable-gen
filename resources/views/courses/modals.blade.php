@@ -32,11 +32,11 @@
                             </div>
 
                             <div class="form-group">
-                                <label>Professors</label>
+                                <label>Lecturer</label>
 
                                 <div class="select2-wrapper">
                                     <select id="professors-select" name="professor_ids[]" class="form-control select2" multiple>
-                                        <option value="">Select professors</option>
+                                        <option value="">Select Lecturer</option>
                                         @foreach ($professors as $professor)
                                          <option value="{{ $professor->id }}">{{ $professor->name }}</option>
                                         @endforeach

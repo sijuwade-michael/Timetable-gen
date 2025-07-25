@@ -19,7 +19,6 @@ Timetable.prototype.init = function() {
         self.printTimetable(printWin, url);
     });
 };
-
 Timetable.prototype.printTimetable = function(printWin, url) {
     $.get(url, null, function (response) {
         printWin.resizeTo(window.innerWidth, window.innerHeight);
